@@ -12,11 +12,13 @@ from functools import wraps
 
 from selenium import webdriver
 
-PAIRS_LOGIN_URL = 'https://pairs.lv/#/login'
-SEARCH_RESULT_COUNT_SELECTOR = '#pairs_search_page > div > div.box_search_menu > p:nth-child(5)'
-FACE_BOOK_LOGIN_BUTTON = '#registerBtn1'
-FIRST_ACCESS_NUM = 1
-fail_cnt = 0
+_PAIRS_LOGIN_URL = 'https://pairs.lv/#/login'
+_SEARCH_RESULT_COUNT_SELECTOR = '#pairs_search_page > div > div.box_search_menu > p:nth-child(5)'
+_FACE_BOOK_LOGIN_BUTTON = '#registerBtn1'
+_FIRST_ACCESS_NUM = 1
+_MAX_ACCESS_NUM_BASE = int(os.environ['PAIRS_MAX_ACCESS_NUM'])
+_ADD_ACCESS_NUM = int(os.environ['PAIRS_ADD_ACCESS_NUM'])
+_FAIL_COUNT = 0
 
 
 def stop_watch(func):
@@ -42,14 +44,14 @@ def stop_watch(func):
 @stop_watch
 def main():
     current_access_count = 0
-    max_access_num_base = 5
-    max_access_num = random.randint(max_access_num_base, max_access_num_base + 5)
+    
+    max_access_num = random.randint(_MAX_ACCESS_NUM_BASE, _MAX_ACCESS_NUM_BASE + _ADD_ACCESS_NUM)
     driver = webdriver.Chrome()
-    driver.get(PAIRS_LOGIN_URL)
+    driver.get(_PAIRS_LOGIN_URL)
     time.sleep(5)
     authenticate_facebook(driver)
 
-    src = "https://pairs.lv/#/search/one/%s" % str(FIRST_ACCESS_NUM)
+    src = "https://pairs.lv/#/search/one/%s" % str(_FIRST_ACCESS_NUM)
     driver.get(src)
     num_list = get_random_list(driver)
     time.sleep(5)
@@ -65,7 +67,7 @@ def main():
         except:
             continue
         print(f'{i}人目：', str(num))
-        time.sleep(random.randint(6, 10))
+        time.sleep(random.randint(7, 9))
 
     print(f"{current_access_count}人に足跡を付けました")
     driver.close()
@@ -77,7 +79,7 @@ def authenticate_facebook(driver):
     Facebookアカウントからログイン認証を行う。
     :param driver: chrome driver
     """
-    driver.find_element_by_css_selector(FACE_BOOK_LOGIN_BUTTON).click()
+    driver.find_element_by_css_selector(_FACE_BOOK_LOGIN_BUTTON).click()
     time.sleep(5)
     handle_array = driver.window_handles
     driver.switch_to.window(handle_array[1])
@@ -99,9 +101,9 @@ def get_random_list(driver):
     :return: 検索結果の件数分のシャッフルした数値リスト
     """
     try:
-        global fail_cnt
+        global _FAIL_COUNT
         time.sleep(1)
-        result_count_info = driver.find_element_by_css_selector(SEARCH_RESULT_COUNT_SELECTOR).text
+        result_count_info = driver.find_element_by_css_selector(_SEARCH_RESULT_COUNT_SELECTOR).text
         result_count = int(re.search(r'^\d+', re.sub(',', '', result_count_info)).group(0))
         print('result_count:', result_count)
         if result_count == 0:
@@ -110,10 +112,10 @@ def get_random_list(driver):
         random.shuffle(num_list)
         return num_list
     except Exception as e:
-        if fail_cnt >= 10:
+        if _FAIL_COUNT >= 10:
             print('css NG')
             return exit(1)
-        fail_cnt += 1
+        _FAIL_COUNT += 1
         return get_random_list(driver)
 
 
