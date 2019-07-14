@@ -1,2 +1,4 @@
 .idea/
 src/kozuke/prac/logfile/
+alembic.ini
+alembic-db/

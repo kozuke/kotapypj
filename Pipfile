@@ -4,10 +4,16 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+ipython = "==6.2.1"
 
 [packages]
 pandas = "*"
 selenium = "*"
+sqlalchemy = "*"
+pytest = "*"
+jupyter = "*"
+alembic = "*"
+django = "*"
 
 [requires]
 python_version = "3.7"
