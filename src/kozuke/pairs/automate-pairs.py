@@ -3,50 +3,29 @@
 元ネタ
 https://rikediary.com/matching-app/automation/python-pairs/
 """
-import os
+from os import environ
+from os.path import basename
 import time
 import random
 import re
-import datetime
-from functools import wraps
 
 from selenium import webdriver
 
-from commonlib.log import get_logger
+from commonlib.log import get_logger, stop_watch
 
 _PAIRS_LOGIN_URL = 'https://pairs.lv/#/login'
 _SEARCH_RESULT_COUNT_SELECTOR = '#pairs_search_page > div > div.box_search_menu > p:nth-child(5)'
 _FACE_BOOK_LOGIN_BUTTON = '#registerBtn1'
 _FIRST_ACCESS_NUM = 1
-_MAX_ACCESS_NUM_BASE = int(os.environ['PAIRS_MAX_ACCESS_NUM'])
-_ADD_ACCESS_NUM = int(os.environ['PAIRS_ADD_ACCESS_NUM'])
+_MAX_ACCESS_NUM_BASE = int(environ['PAIRS_MAX_ACCESS_NUM'])
+_ADD_ACCESS_NUM = int(environ['PAIRS_ADD_ACCESS_NUM'])
 fail_count = 0
 
 # logger
 logger = get_logger(__name__)
 
 
-def stop_watch(func):
-    """
-    時間計測デコレーター
-    TODO to-be ライブラリ化
-    :param func:
-    :return:
-    """
-
-    @wraps(func)
-    def wrapper(*args, **kargs):
-        start = time.time()
-        logger.info(datetime.datetime.now())
-        result = func(*args, **kargs)
-        elapsed_time = time.time() - start
-        logger.info(f"{func.__name__}は{elapsed_time}秒かかりました")
-        return result
-
-    return wrapper
-
-
-@stop_watch
+@stop_watch(basename(__file__), logger)
 def main():
     current_access_count = 0
 
@@ -88,8 +67,8 @@ def authenticate_facebook(driver):
     time.sleep(5)
     handle_array = driver.window_handles
     driver.switch_to.window(handle_array[1])
-    driver.find_element_by_css_selector('#email').send_keys(os.environ['FACEBOOK_EMAIL'])
-    driver.find_element_by_css_selector('#pass').send_keys(os.environ['FACEBOOK_PASS'])
+    driver.find_element_by_css_selector('#email').send_keys(environ['FACEBOOK_EMAIL'])
+    driver.find_element_by_css_selector('#pass').send_keys(environ['FACEBOOK_PASS'])
     driver.find_element_by_css_selector('#u_0_0').click()
     time.sleep(5)
     driver.switch_to.window(handle_array[0])

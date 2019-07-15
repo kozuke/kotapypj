@@ -1,4 +1,6 @@
 import logging
+import time
+from datetime import datetime
 
 
 def get_logger(name: str):
@@ -30,3 +32,24 @@ def get_logger(name: str):
     logger.addHandler(file_handler)
 
     return logger
+
+
+def stop_watch(message: str, logger):
+    """
+    時間計測デコレーター
+    :param message: 任意のメッセージ
+    :param logger: loggerオブジェクト
+    """
+
+    def _stop_watch(func):
+        def wrapper(*args, **kargs):
+            start = time.time()
+            logger.info(datetime.now())
+            result = func(*args, **kargs)
+            elapsed_time = time.time() - start
+            logger.info(f"{message}は{elapsed_time}秒かかりました")
+            return result
+
+        return wrapper
+
+    return _stop_watch
