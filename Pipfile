@@ -14,6 +14,8 @@ pytest = "*"
 jupyter = "*"
 alembic = "*"
 django = "*"
+requests = "*"
+beautifulsoup4 = "*"
 
 [requires]
 python_version = "3.7"
