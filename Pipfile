@@ -16,6 +16,7 @@ alembic = "*"
 django = "*"
 requests = "*"
 beautifulsoup4 = "*"
+janome = "*"
 
 [requires]
 python_version = "3.7"
