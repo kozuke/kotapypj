@@ -17,6 +17,7 @@ django = "*"
 requests = "*"
 beautifulsoup4 = "*"
 janome = "*"
+gensim = "*"
 
 [requires]
 python_version = "3.7"

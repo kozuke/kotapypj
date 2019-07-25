@@ -48,7 +48,7 @@ def main():
         src = "https://pairs.lv/#/search/one/%s" % str(num)
         try:
             driver.get(src)
-        except:
+        except Exception as e:
             continue
         logger.info(f'{i}人目：{num}')
         time.sleep(random.randint(7, 9))

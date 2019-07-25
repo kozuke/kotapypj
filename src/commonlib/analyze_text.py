@@ -12,6 +12,7 @@ def janome_analyze(text: str):
         for w in malist:
             word = w.surface
             ps = w.part_of_speech
+            print(w, word, ps, sep='■')
             if ps.find('名詞') < 0:
                 continue
             if word not in word_dic:

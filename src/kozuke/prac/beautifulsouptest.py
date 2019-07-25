@@ -1,6 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 
+text = """<p class="list_title"><a href="https://gunosy.com/articles/RQOSo">ミスタードーナツ×堂島ロールがコラボした「ローナツ」が誕生！夏季限定コレクションはプチ贅沢な5種類♡</a></p>
+"""
+soup = BeautifulSoup(text, "html.parser")
+print(soup.find('a').attrs['href'])
+
 r = requests.get("https://news.yahoo.co.jp/")
 url = []
 
@@ -11,11 +16,11 @@ print(css)
 for val in css:
     print(val.text)
 
-yaho = soup.find_all("a")
+yahoo = soup.find_all("a")
 # aタグの部分の内容を確認
-print(yaho)
+print(yahoo)
 
-for script in yaho:
+for script in yahoo:
     # "主要"ニュースのタイトルを取ってくるにはどうしたらよい？
     x = script.text
     url.append(x)
