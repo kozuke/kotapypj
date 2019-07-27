@@ -12,6 +12,8 @@ import re
 from selenium import webdriver
 
 from commonlib.log import get_logger, stop_watch
+from commonlib.db import default_engine, DB
+from db.kotapypj_model import AccessLog
 
 _PAIRS_LOGIN_URL = 'https://pairs.lv/#/login'
 _SEARCH_RESULT_COUNT_SELECTOR = '#pairs_search_page > div > div.box_search_menu > p:nth-child(5)'
@@ -28,6 +30,7 @@ logger = get_logger(__name__)
 
 @stop_watch(basename(__file__), logger)
 def main():
+    init_db()
     current_access_count = 0
 
     max_access_num = random.randint(_MAX_ACCESS_NUM_BASE, _MAX_ACCESS_NUM_BASE + _ADD_ACCESS_NUM)
@@ -61,6 +64,7 @@ def main():
         time.sleep(random.randint(7, 9))
 
     logger.info(f"{current_access_count}人に足跡を付けました")
+    insert_access_count(current_access_count)
     driver.close()
     driver.quit()
 
@@ -122,6 +126,16 @@ def get_random_list(driver):
         fail_count += 1
         time.sleep(3)
         return get_random_list(driver)
+
+
+def init_db():
+    global dbsvr
+    dbsvr = default_engine()
+
+
+def insert_access_count(access_count):
+    access_log = AccessLog(access_count=access_count)
+    DB(dbsvr).insert(access_log)
 
 
 if __name__ == '__main__':
