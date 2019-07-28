@@ -18,6 +18,8 @@ requests = "*"
 beautifulsoup4 = "*"
 janome = "*"
 gensim = "*"
+flask = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.7"
