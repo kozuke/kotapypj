@@ -13,7 +13,7 @@ from selenium import webdriver
 
 from commonlib.log import get_logger, stop_watch
 from commonlib.db import default_engine, DB
-from db.kotapypj_model import AccessLog
+from db.kotapypj_models import AccessLog
 
 _PAIRS_LOGIN_URL = 'https://pairs.lv/#/login'
 _SEARCH_RESULT_COUNT_SELECTOR = '#pairs_search_page > div > div.box_search_menu > p:nth-child(5)'
@@ -35,6 +35,7 @@ def main():
 
     max_access_num = random.randint(_MAX_ACCESS_NUM_BASE, _MAX_ACCESS_NUM_BASE + _ADD_ACCESS_NUM)
     options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
     # options.add_argument("user-data-dir=" + _PROFILE_PATH) # これでsession保てるはずだができない。
 
     # このprofileを読み込ませることで「facebook.comが許可を求めています。」のアラートがなくなる。
