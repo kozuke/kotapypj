@@ -35,7 +35,7 @@ def main():
 
     max_access_num = random.randint(_MAX_ACCESS_NUM_BASE, _MAX_ACCESS_NUM_BASE + _ADD_ACCESS_NUM)
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
     # options.add_argument("user-data-dir=" + _PROFILE_PATH) # これでsession保てるはずだができない。
 
     # このprofileを読み込ませることで「facebook.comが許可を求めています。」のアラートがなくなる。
